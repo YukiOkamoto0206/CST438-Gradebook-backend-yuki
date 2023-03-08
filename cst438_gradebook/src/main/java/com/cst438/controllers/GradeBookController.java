@@ -1,6 +1,16 @@
 package com.cst438.controllers;
 
 import java.util.ArrayList;
+import java.sql.Date;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +37,7 @@ import com.cst438.domain.CourseDTOG;
 import com.cst438.domain.CourseRepository;
 import com.cst438.domain.Enrollment;
 import com.cst438.domain.GradebookDTO;
+import com.cst438.domain.AssignmentListDTO.AssignmentDTO;
 import com.cst438.services.RegistrationService;
 
 @RestController
@@ -168,6 +181,45 @@ public class GradeBookController {
 		}
 		
 		return assignment;
+	}
+	
+	@GetMapping("/assignments/{id}")
+	@Transactional
+	public Assignment getAllAssignments(@PathVariable("id") Integer assignmentId) {
+		Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
+		return assignment;
+	}
+	
+	@PostMapping("/assignment")
+	@Transactional
+	public void addNewAssignment (@RequestParam("name") String name, @RequestParam("dueDate") Date dueDate, @RequestParam("courseId") int courseId) {
+		Assignment assignment = new Assignment();
+		assignment.setName(name);
+		assignment.setDueDate(dueDate);
+		Course course = courseRepository.findByCourse_id(courseId);
+		assignment.setCourse(course);
+		assignmentRepository.save(assignment);
+	}
+	
+	@PostMapping("/assignment/{id}")
+	@Transactional
+	public void updateAssignment(@RequestParam("name") String name, @PathVariable("id") int assignmentId) {
+		Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
+		if (assignment == null) {
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Assignment not found. "+assignmentId );
+		}
+		assignment.setName(name);
+		assignmentRepository.save(assignment);
+	}
+	
+	@DeleteMapping("/assignment/{id}")
+	@Transactional
+	public void deleteAssignment(@PathVariable("id") Integer assignmentId) {
+		Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
+		if (assignment == null) {
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Assignment not found. "+assignmentId );
+		}
+		assignmentRepository.delete(assignment);
 	}
 
 }
