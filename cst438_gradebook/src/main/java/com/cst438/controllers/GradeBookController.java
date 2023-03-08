@@ -201,7 +201,7 @@ public class GradeBookController {
 		assignmentRepository.save(assignment);
 	}
 	
-	@PostMapping("/assignment/{id}")
+	@PutMapping("/assignment/{id}")
 	@Transactional
 	public void updateAssignment(@RequestParam("name") String name, @PathVariable("id") int assignmentId) {
 		Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);

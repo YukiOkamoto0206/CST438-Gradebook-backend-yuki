@@ -339,7 +339,7 @@ public class JunitTestGradebook {
 		newAssignment.setDueDate(java.sql.Date.valueOf("2021-09-01"));
 		newAssignment.setCourse(course);
 
-		response = mvc.perform(MockMvcRequestBuilders.post("/assignment/1?name=test").accept(MediaType.APPLICATION_JSON))
+		response = mvc.perform(MockMvcRequestBuilders.put("/assignment/1?name=test").accept(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse();
 
 		assertEquals(200, response.getStatus());
