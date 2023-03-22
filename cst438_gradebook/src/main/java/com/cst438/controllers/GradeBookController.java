@@ -1,8 +1,10 @@
 package com.cst438.controllers;
 
 import java.util.ArrayList;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;  
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -192,13 +194,30 @@ public class GradeBookController {
 	
 	@PostMapping("/assignment")
 	@Transactional
-	public void addNewAssignment (@RequestParam("name") String name, @RequestParam("dueDate") Date dueDate, @RequestParam("courseId") int courseId) {
+	public AssignmentDTO addNewAssignment (@RequestParam("name") String name, @RequestParam("dueDate") String dueDate, @RequestParam("courseId") String courseId) throws ParseException {
 		Assignment assignment = new Assignment();
 		assignment.setName(name);
-		assignment.setDueDate(dueDate);
-		Course course = courseRepository.findByCourse_id(courseId);
+		System.out.println(dueDate);
+		Date due = new SimpleDateFormat("yyyy-mm-dd").parse(dueDate);
+//		Date due = new Date(dueDate);
+		assignment.setDueDate(due);
+		System.out.println(courseId);
+		int id = Integer.parseInt(courseId);
+		Course course = courseRepository.findByCourse_id(id);
+		System.out.println(course);
 		assignment.setCourse(course);
-		assignmentRepository.save(assignment);
+		assignment = assignmentRepository.save(assignment);
+		AssignmentDTO dto = new AssignmentDTO(assignment.getId(), id, name, dueDate,
+				course.getTitle());
+		return dto;
+	}
+	
+	@GetMapping("/course")
+	@Transactional
+	public Iterable<Course> getCourses () {
+        Iterable<Course> courses = courseRepository.findAll();
+
+		return courses;
 	}
 	
 	@PutMapping("/assignment/{id}")
