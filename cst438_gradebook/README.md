@@ -32,3 +32,13 @@
 - adds a student to a course
 - body contains JSON for EnrollmentDTO
 
+### RabbitMQ
+Installed by homebrew.
+```
+brew services start rabbitmq     //start 
+brew services stop  rabbitmq     //stop
+brew services restart rabbitmq   //restart 
+
+brew services list // check the list of services (mysql etc...)
+
+```
