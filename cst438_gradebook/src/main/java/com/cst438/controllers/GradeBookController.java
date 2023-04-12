@@ -212,6 +212,33 @@ public class GradeBookController {
 		return dto;
 	}
 	
+//	@PostMapping("/assignment")
+//	@Transactional
+//	public AssignmentDTO newAssignment(@RequestBody AssignmentDTO dto) throws ParseException {
+//		String userEmail = "dwisneski@csumb.edu";
+//		// validate course and that the course instructor is the user
+//		Course c = courseRepository.findById(dto.courseId).orElse(null);
+//		if (c != null && c.getInstructor().equals(userEmail)) {
+//			// create and save new assignment
+//			// update and return dto with new assignment primary key
+//			Assignment a = new Assignment();
+//			a.setCourse(c);
+//			a.setName(dto.assignmentName);
+//			Date due = new SimpleDateFormat("yyyy-mm-dd").parse(dto.dueDate);
+//			a.setDueDate(due);
+//			a.setNeedsGrading(1);
+//			a = assignmentRepository.save(a);
+//			dto.assignmentId=a.getId();
+//			return dto;
+//		} else {
+//			// invalid course
+//			throw new ResponseStatusException( 
+//                           HttpStatus.BAD_REQUEST, 
+//                          "Invalid course id.");
+//		}
+//	}
+
+	
 	@GetMapping("/course")
 	@Transactional
 	public Iterable<Course> getCourses () {
