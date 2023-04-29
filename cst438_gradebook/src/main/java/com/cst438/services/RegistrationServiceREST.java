@@ -19,8 +19,9 @@ public class RegistrationServiceREST extends RegistrationService {
 	
 	@Override
 	public void sendFinalGrades(int course_id , CourseDTOG courseDTO) { 
-		
-		//TODO  complete this method in homework 4
-		
+		System.out.println("Sending final grades " + course_id + " " + courseDTO);
+		// Use restTemplate.put because in CourseController.java, I use PutMapping
+		restTemplate.put(registration_url+"/course/"+course_id, courseDTO);
+		System.out.println("After sending final grades");
 	}
 }
